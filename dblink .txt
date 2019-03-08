@@ -1,0 +1,280 @@
+
+if    (
+select isnull(count(*),0) from xmlcontrolehorario
+  where @hora between case when horainicio >='12:00' and  horainicio <= '23:59'
+		 then cast(dateadd(day,-1,getdate()) as varchar(12)) + ' '+ cast(horainicio as varchar(5))
+		 else cast(dateadd(day,0,getdate()) as varchar(12)) + ' '+ cast(horainicio as varchar(5))
+
+end 
+ and cast(dateadd(day,0,getdate()) as varchar(12)) + ' '+cast(horafim as varchar(5)) ) <>1 
+Begin 
+--select 'break' as breaking
+--	break
+End 
+
+
+
+
+spu_vendas_MicrosVendasIncluir 0, '2017-9-20' ,0,0,'2017-9-20',0,0,0,0,4653.4,0,0,785.4,86
+
+
+SELECT        TOP (100) PERCENT CONVERT(varchar(11), DATEADD(day, (DAY(DATEADD(day, - 367, dbo.VW_PDFPrePendente.data_pdf)) - 1) * - 1, DATEADD(day, - 367, dbo.VW_PDFPrePendente.data_pdf)), 106) AS dataini, 
+                         CONVERT(varchar(11), DATEADD(day, - 366, dbo.VW_PDFPrePendente.data_pdf), 6) + ' 23:59' AS datafim, dbo.tb_vendas_VendasMicros_ob.cod_loja, SUM(dbo.tb_vendas_VendasMicros_ob.venda_anoant) 
+                         AS venda_anoant_consolidado_anoant, SUM(dbo.tb_vendas_VendasMicros_ob.cc_anoant) AS cc_anoant_consolidado_anoant, SUM(dbo.tb_vendas_VendasMicros_ob.venda) AS venda_consolidado_anoant, 
+                         SUM(dbo.tb_vendas_VendasMicros_ob.cc) AS cc_consolidado_anoant, SUM(dbo.tb_vendas_VendasMicros_ob.buget_venda) AS buget_venda_consolidado_anoant, 
+                         SUM(dbo.tb_vendas_VendasMicros_ob.buget_cc) AS buget_cc_consolidado_anoant, SUM(dbo.tb_vendas_VendasMicros_ob.bruto_buget) AS bruto_buget_consolidado_anoant, 
+                         SUM(dbo.tb_vendas_VendasMicros_ob.bruto_micros_1) AS bruto_micros_1_consolidado_anoant, SUM(dbo.tb_vendas_VendasMicros_ob.bruto_micros) AS bruto_micros_consolidado_anoant, 
+                         SUM(dbo.tb_vendas_VendasMicros_ob.pmix) AS pmix_consolidadoAnoAnt
+FROM            dbo.tb_vendas_VendasMicros_ob INNER JOIN
+                         dbo.VW_PDFPrePendente ON dbo.tb_vendas_VendasMicros_ob.data_ano >= CONVERT(varchar(11), DATEADD(day, (DAY(DATEADD(day, - 367, dbo.VW_PDFPrePendente.data_pdf)) - 1) * - 1, DATEADD(day, - 367, 
+                         dbo.VW_PDFPrePendente.data_pdf)), 106) AND dbo.tb_vendas_VendasMicros_ob.data_ano <= CONVERT(varchar(11), DATEADD(day, - 366, dbo.VW_PDFPrePendente.data_pdf), 106) + ' 23:59'
+GROUP BY dbo.tb_vendas_VendasMicros_ob.cod_loja, dbo.VW_PDFPrePendente.data_pdf
+ORDER BY dbo.tb_vendas_VendasMicros_ob.cod_loja
+
+
+CONVERT(varchar(11), DATEADD(day, (DAY(DATEADD(day, - 367, dbo.VW_PDFPrePendente.data_pdf)) - 1) * - 1, DATEADD(day, - 367, dbo.VW_PDFPrePendente.data_pdf)), 106) 
+
+
+EXEC sp_addlinkedserver            
+@server = 'DynamicsAX',      
+@srvproduct='',
+@provider = 'SQLNCLI' ,
+@datasrc  = '192.168.250.126\DynamicsAX'
+--,@provstr = 'DSN=Micros;UID=custom;PWD=custom;'
+
+sp_addlinkedsrvlogin @useself='false ', @rmtsrvname = 'DynamicsAX',
+@rmtuser = 'IntegraPmixAX',
+@rmtpassword = 'Integra@1904'
+
+-- 'sqlPGS-SP-EM-P01' 
+ 
+exec sp_tables_ex 'DynamicsAX'
+
+sp_dropserver 'DynamicsAX', 'droplogins'
+
+EXEC sp_linkedservers
+use TESTE
+DBCC TRACEON(3604, 7300)
+go
+SELECT * FROM intranet_micros.Micros.rest_def
+go 
+
+DBCC TRACEON(3604, 7300)
+go
+
+select convert(varchar(12), getdate(),  103 )
+SELECT * FROM OPENQUERY(intranet_micros,'SELECT   B.obj_num,  A.mi_seq, c.obj_num as code  , c.store_id, c.rest_name as loja , day(a.business_date) as dia , month(a.business_date) as mes, year(a.business_date) as ano,B.name_1 as produto ,  SUM(price_1_sls_cnt + price_2_sls_cnt + price_3_sls_cnt + price_4_sls_cnt + price_5_sls_cnt + price_6_sls_cnt + price_7_sls_cnt + price_8_sls_cnt + price_9_sls_cnt + price_10_sls_cnt) as PMIX, SUM(price_1_sls_ttl + price_2_sls_ttl + price_3_sls_ttl + price_4_sls_ttl + price_5_sls_ttl + price_6_sls_ttl + price_7_sls_ttl + price_8_sls_ttl + price_9_sls_ttl + price_10_sls_ttl) as SALES, a.business_Date FROM micros.rest_def as c ,  micros.dly_rvc_fixed_prd_mi_ttl A, micros.mi_def B  WHERE A.business_date >= Convert(DateTime,'07/09/2016',103) and A.mi_seq = B.mi_seq  and a.store_id = c.store_id GROUP BY  c.obj_num ,c.store_id, c.rest_name, day(a.business_date) ,  month(a.business_date) ,  year(a.business_date) , A.mi_seq,B.name_1, B.obj_num , a.business_Date ')
+
+declare @sql as varchar(8000)
+select @sql = 'SELECT   B.obj_num,  A.mi_seq, c.obj_num as code  , c.store_id, c.rest_name as loja , day(a.business_date) as dia , month(a.business_date) as mes, year(a.business_date) as ano,B.name_1 as produto ,  SUM(price_1_sls_cnt + price_2_sls_cnt + price_3_sls_cnt + price_4_sls_cnt + price_5_sls_cnt + price_6_sls_cnt + price_7_sls_cnt + price_8_sls_cnt + price_9_sls_cnt + price_10_sls_cnt) as PMIX, SUM(price_1_sls_ttl + price_2_sls_ttl + price_3_sls_ttl + price_4_sls_ttl + price_5_sls_ttl + price_6_sls_ttl + price_7_sls_ttl + price_8_sls_ttl + price_9_sls_ttl + price_10_sls_ttl) as SALES, a.business_Date FROM micros.rest_def as c ,  micros.dly_rvc_fixed_prd_mi_ttl A, micros.mi_def B  WHERE A.business_date >= Convert(DateTime,'''''+ convert(varchar(12), dateadd(day, -10, getdate()),  103 )     + ''''',103) and A.mi_seq = B.mi_seq  and a.store_id = c.store_id GROUP BY  c.obj_num ,c.store_id, c.rest_name, day(a.business_date) ,  month(a.business_date) ,  year(a.business_date) , A.mi_seq,B.name_1, B.obj_num , a.business_Date '
+--select @sql 
+
+DECLARE @TSQL varchar(8000) 
+SELECT  @TSQL = 'SELECT * FROM OPENQUERY(intranet_micros,'''+ @sql +''')'
+select @tsql 
+ EXEC (@TSQL)
+
+declare @sql as varchar(8000)
+select @sql = 'SELECT  c.obj_num , c.store_id, c.rest_name, day(a.business_date) as dia , month(a.business_date) as mes, year(a.business_date) as ano, A.mi_seq,B.name_1, B.obj_num,  SUM(price_1_sls_cnt + price_2_sls_cnt + price_3_sls_cnt + price_4_sls_cnt + price_5_sls_cnt + price_6_sls_cnt + price_7_sls_cnt + price_8_sls_cnt + price_9_sls_cnt + price_10_sls_cnt) as PMIX, SUM(price_1_sls_ttl + price_2_sls_ttl + price_3_sls_ttl + price_4_sls_ttl + price_5_sls_ttl + price_6_sls_ttl + price_7_sls_ttl + price_8_sls_ttl + price_9_sls_ttl + price_10_sls_ttl) as SALES FROM micros.rest_def as c ,  micros.dly_rvc_fixed_prd_mi_ttl A, micros.mi_def B  WHERE A.business_date >= Convert(DateTime,''15/09/2016'',103) and A.mi_seq = B.mi_seq  and a.store_id = c.store_id GROUP BY  c.obj_num ,c.store_id, c.rest_name, day(a.business_date) ,  month(a.business_date) ,  year(a.business_date) , A.mi_seq,B.name_1, B.obj_num '
+select @sql 
+
+SELECT * FROM OPENQUERY(intranet_micros, @sql )
+
+
+SELECT  c.obj_num , c.store_id, c.rest_name, day(a.business_date) as dia , month(a.business_date) as mes, year(a.business_date) as ano, A.mi_seq,B.name_1, B.obj_num,  SUM(price_1_sls_cnt + price_2_sls_cnt + price_3_sls_cnt + price_4_sls_cnt + price_5_sls_cnt + price_6_sls_cnt + price_7_sls_cnt + price_8_sls_cnt + price_9_sls_cnt + price_10_sls_cnt) as PMIX, SUM(price_1_sls_ttl + price_2_sls_ttl + price_3_sls_ttl + price_4_sls_ttl + price_5_sls_ttl + price_6_sls_ttl + price_7_sls_ttl + price_8_sls_ttl + price_9_sls_ttl + price_10_sls_ttl) as SALES FROM micros.rest_def as c ,  micros.dly_rvc_fixed_prd_mi_ttl A, micros.mi_def B  
+WHERE A.business_date >= Convert(DateTime,'15/09/2016',103) and A.mi_seq = B.mi_seq  and a.store_id = c.store_id GROUP BY  c.obj_num ,c.store_id, c.rest_name, day(a.business_date) ,  month(a.business_date) ,  
+year(a.business_date) , A.mi_seq,B.name_1, B.obj_num 
+
+USE [AX2009_OUTBACK_TRN]
+GO
+
+/****** Object:  View [dbo].[VW_Micros_Pmix_Loja_Data_ob]    Script Date: 12/04/2014 11:07:29 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE VIEW [dbo].[VW_Micros_Pmix_Loja_Data_ob]
+AS
+SELECT     code, store_id, loja, dia, mes, ano, cod_produto, produto, pmix, sales
+FROM         OPENQUERY(Intranet, 'Select * from VW_Micros_Pmix_Loja_Data_ob') AS derivedtbl_1
+
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPane1', @value=N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
+Begin DesignProperties = 
+   Begin PaneConfigurations = 
+      Begin PaneConfiguration = 0
+         NumPanes = 4
+         Configuration = "(H (1[40] 4[20] 2[20] 3) )"
+      End
+      Begin PaneConfiguration = 1
+         NumPanes = 3
+         Configuration = "(H (1 [50] 4 [25] 3))"
+      End
+      Begin PaneConfiguration = 2
+         NumPanes = 3
+         Configuration = "(H (1 [50] 2 [25] 3))"
+      End
+      Begin PaneConfiguration = 3
+         NumPanes = 3
+         Configuration = "(H (4 [30] 2 [40] 3))"
+      End
+      Begin PaneConfiguration = 4
+         NumPanes = 2
+         Configuration = "(H (1 [56] 3))"
+      End
+      Begin PaneConfiguration = 5
+         NumPanes = 2
+         Configuration = "(H (2 [66] 3))"
+      End
+      Begin PaneConfiguration = 6
+         NumPanes = 2
+         Configuration = "(H (4 [50] 3))"
+      End
+      Begin PaneConfiguration = 7
+         NumPanes = 1
+         Configuration = "(V (3))"
+      End
+      Begin PaneConfiguration = 8
+         NumPanes = 3
+         Configuration = "(H (1[56] 4[18] 2) )"
+      End
+      Begin PaneConfiguration = 9
+         NumPanes = 2
+         Configuration = "(H (1 [75] 4))"
+      End
+      Begin PaneConfiguration = 10
+         NumPanes = 2
+         Configuration = "(H (1[66] 2) )"
+      End
+      Begin PaneConfiguration = 11
+         NumPanes = 2
+         Configuration = "(H (4 [60] 2))"
+      End
+      Begin PaneConfiguration = 12
+         NumPanes = 1
+         Configuration = "(H (1) )"
+      End
+      Begin PaneConfiguration = 13
+         NumPanes = 1
+         Configuration = "(V (4))"
+      End
+      Begin PaneConfiguration = 14
+         NumPanes = 1
+         Configuration = "(V (2))"
+      End
+      ActivePaneConfig = 0
+   End
+   Begin DiagramPane = 
+      Begin Origin = 
+         Top = 0
+         Left = 0
+      End
+      Begin Tables = 
+         Begin Table = "derivedtbl_1"
+            Begin Extent = 
+               Top = 6
+               Left = 38
+               Bottom = 114
+               Right = 189
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+      End
+   End
+   Begin SQLPane = 
+   End
+   Begin DataPane = 
+      Begin ParameterDefaults = ""
+      End
+   End
+   Begin CriteriaPane = 
+      Begin ColumnWidths = 11
+         Column = 1440
+         Alias = 900
+         Table = 1170
+         Output = 720
+         Append = 1400
+         NewValue = 1170
+         SortType = 1350
+         SortOrder = 1410
+         GroupBy = 1350
+         Filter = 1350
+         Or = 1350
+         Or = 1350
+         Or = 1350
+      End
+   End
+End
+' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'VIEW',@level1name=N'VW_Micros_Pmix_Loja_Data_ob'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_DiagramPaneCount', @value=1 , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'VIEW',@level1name=N'VW_Micros_Pmix_Loja_Data_ob'
+GO
+
+
+Att,
+
+Alessandro Garcia
+Consultor
+21 99517-7679
+21 3591-8046
+www.asginfo.com.br
+ 
+
+De: Alessandro Garcia [mailto:alessandro@asginfo.com.br] 
+Enviada em: terça-feira, 25 de junho de 2013 23:58
+Para: Alessandro Garcia
+Assunto: teste
+
+EXEC sp_addlinkedserver            
+@server = 'teste',      
+@srvproduct='Sybase',
+@provider = 'MSDASQL' ,
+@datasrc  = 'Micros'
+--,@provstr = 'DSN=Micros;UID=custom;PWD=custom;'
+
+sp_addlinkedsrvlogin @useself='false ', @rmtsrvname = 'teste',
+@rmtuser = 'custom',
+@rmtpassword = 'custom'
+
+-- 'sqlPGS-SP-EM-P01' 
+
+exec sp_tables_ex 'GARCIA-PC'
+exec sp_tables_ex 'teste'
+
+sp_dropserver 'sqlPGS-SP-EM-P01'
+
+EXEC sp_linkedservers
+use TESTE
+DBCC TRACEON(3604, 7300)
+go
+SELECT * FROM teste.Micros.rest_def
+go 
+
+DBCC TRACEON(3604, 7300)
+go
+SELECT * FROM OPENQUERY(teste, 'Select * from Micros.rest_def')
+go
+
+
+
+EXEC sp_addlinkedserver            
+@server = 'DynamicsAX',      
+@srvproduct='',
+@provider = 'SQLNCLI' ,
+@datasrc  = '192.168.250.126\DynamicsAX'
+--,@provstr = 'DSN=Micros;UID=custom;PWD=custom;'
+
+sp_addlinkedsrvlogin @useself='false ', @rmtsrvname = 'DynamicsAX',
+@rmtuser = 'IntegraPmixAX',
+@rmtpassword = 'Integra@1904'
+
+-- 'sqlPGS-SP-EM-P01' 
+ 
+exec sp_tables_ex 'DynamicsAX'
+
+sp_dropserver 'DynamicsAX', 'droplogins'

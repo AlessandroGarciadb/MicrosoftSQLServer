@@ -1,0 +1,26 @@
+create table #temp(
+id   integer
+ )
+
+delete #temp
+
+declare @i as int
+select @i = 0
+
+while (@i <> 20)
+Begin
+ insert #temp values (@i) 
+ select @i = @i + 1 
+End
+
+-- Loop through the Linked Server List
+--
+WHILE EXISTS ( SELECT * FROM #temp )
+BEGIN
+select @i ;
+exec SPU_ProcessaXMLPendentes
+
+select top 1 @i = ID from #temp
+delete #temp where id = @i
+End
+
